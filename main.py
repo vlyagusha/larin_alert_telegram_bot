@@ -16,9 +16,9 @@ async def start(message: types.Message):
     await message.reply("Hi!\nI'm EchoBot!\nPowered by aiogram.")
 
 
-@dp.message_handler(commands=['send'])
+@dp.message_handler(commands=['send', 'say'])
 async def send(message):
-    message_text = message.get_args()
+    message_text = "Сообщение от " + message.from_user.full_name + ":\n" + message.get_args()
     await bot.send_message(os.environ.get("DESTINATION_CHAT_ID"), message_text)
 
 
@@ -28,6 +28,12 @@ async def open_proc(message):
     res = os.system(f"open -a '{program}'")
     if res > 0:
         await message.answer(f"Не удалось найти программу '{program}'")
+
+
+@dp.message_handler(commands=['shutdown'])
+async def open_proc(message):
+    if message.from_user.id == os.environ.get("ADMIN_USER_ID"):
+        os.system('shutdown -h now')
 
 
 @dp.message_handler()
