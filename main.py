@@ -13,7 +13,13 @@ dp = Dispatcher(bot)
 
 @dp.message_handler(commands=['start', 'help'])
 async def start(message: types.Message):
-    await message.reply("Hi!\nI'm EchoBot!\nPowered by aiogram.")
+    await message.reply('''
+Привет! Я - бот-инпектор
+Вот что я умею:
+/send или /say - отправить команду в чат
+/open - открыть программу на удалённом компьютере
+/shutdown - выключить удаленный компьютер
+    ''')
 
 
 @dp.message_handler(commands=['send', 'say'])
@@ -36,9 +42,9 @@ async def open_proc(message):
         os.system('shutdown -h now')
 
 
-@dp.message_handler()
-async def echo(message: types.Message):
-    await message.answer(message.text)
+# @dp.message_handler()
+# async def echo(message: types.Message):
+#     await message.answer(message.text)
 
 
 if __name__ == '__main__':
