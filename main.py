@@ -46,16 +46,16 @@ async def open_proc(message):
 @dp.message_handler(commands=['shutdown'])
 async def open_proc(message):
     if message.from_user.id == os.environ.get("ADMIN_USER_ID"):
-        await message.answer(platform.system())
-        # if platform.system() == 'Windows':
-        #     os.system('shutdown /r')
-        # else:
-        #     os.system('shutdown -h now')
+        if platform.system() == 'Windows':
+            os.system('shutdown /r')
+        else:
+            os.system('shutdown -h now')
 
 
-# @dp.message_handler()
-# async def echo(message: types.Message):
-#     await message.answer(message.text)
+@dp.message_handler(commands=['ostest'])
+async def echo(message: types.Message):
+    # await message.answer(message.text)
+    await message.answer(platform.system())
 
 
 if __name__ == '__main__':
