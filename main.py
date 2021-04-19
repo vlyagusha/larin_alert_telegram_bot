@@ -57,7 +57,7 @@ async def open_proc(message):
 
 @dp.message_handler(commands=['shutdown'])
 async def open_proc(message):
-    if message.from_user.id == os.environ.get("ADMIN_USER_ID"):
+    if int(message.from_user.id) == int(os.environ.get("ADMIN_USER_ID")):
         if platform.system() == 'Windows':
             res = os.system('shutdown /s /t 1')
         else:
@@ -67,7 +67,7 @@ async def open_proc(message):
         else:
             await message.answer("Успешно")
     else:
-        await message.answer(f'Отказано в доступе для {message.from_user.id} - разрешено только {os.environ.get("ADMIN_USER_ID")}')
+        await message.answer(f'Отказано в доступе для {message.from_user.id}')
 
 
 @dp.message_handler(commands=['ostest'])
