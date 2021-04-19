@@ -34,11 +34,13 @@ async def open_proc(message):
     if message.from_user.id == os.environ.get("ADMIN_USER_ID"):
         program = message.get_args()
         if platform.system() == 'Windows':
-            res = 0
+            res = 1
         else:
             res = os.system(f"open -a '{program}'")
         if res > 0:
             await message.answer(f"Не удалось найти программу '{program}'")
+    else:
+        await message.answer('Отказано в доступе')
 
 
 @dp.message_handler(commands=['run'])
@@ -49,18 +51,23 @@ async def open_proc(message):
             pass
         else:
             os.popen(f'sh {filename}')
+    else:
+        await message.answer('Отказано в доступе')
 
 
 @dp.message_handler(commands=['shutdown'])
 async def open_proc(message):
-    res = 1
     if message.from_user.id == os.environ.get("ADMIN_USER_ID"):
         if platform.system() == 'Windows':
-            res = os.system('shutdown /s /f')
+            res = os.system('shutdown /s /t 1')
         else:
             res = os.system('shutdown -h now')
-    if res > 0:
-        await message.answer(f"Код ответа {res}")
+        if res > 0:
+            await message.answer(f"Код ответа {res}")
+        else:
+            await message.answer("Успешно")
+    else:
+        await message.answer('Отказано в доступе')
 
 
 @dp.message_handler(commands=['ostest'])
