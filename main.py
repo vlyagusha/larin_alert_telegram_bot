@@ -67,7 +67,7 @@ async def open_proc(message):
         else:
             await message.answer("Успешно")
     else:
-        await message.answer(f'Отказано в доступе для {message.from_user.id}')
+        await message.answer(f'Отказано в доступе для {message.from_user.id} - разрешено только {os.environ.get("ADMIN_USER_ID")}')
 
 
 @dp.message_handler(commands=['ostest'])
