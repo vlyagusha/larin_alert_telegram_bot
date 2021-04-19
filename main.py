@@ -20,6 +20,7 @@ async def start(message: types.Message):
 /send или /say - отправить команду в чат
 /open - открыть программу на удалённом компьютере
 /shutdown - выключить удаленный компьютер
+/echo - проверка связи
     ''')
 
 
@@ -31,24 +32,28 @@ async def send(message):
 
 @dp.message_handler(commands=['open'])
 async def open_proc(message):
-    if message.from_user.id == os.environ.get("ADMIN_USER_ID"):
+    if int(message.from_user.id) == int(os.environ.get("ADMIN_USER_ID")):
         program = message.get_args()
         if platform.system() == 'Windows':
-            res = 1
+            os.startfile(f'{program}')
+            res = 0
         else:
             res = os.system(f"open -a '{program}'")
+
         if res > 0:
             await message.answer(f"Не удалось найти программу '{program}'")
+        else:
+            await message.answer("Успешно")
     else:
         await message.answer('Отказано в доступе')
 
 
 @dp.message_handler(commands=['run'])
 async def open_proc(message):
-    if message.from_user.id == os.environ.get("ADMIN_USER_ID"):
+    if int(message.from_user.id) == int(os.environ.get("ADMIN_USER_ID")):
         filename = message.get_args()
         if platform.system() == 'Windows':
-            pass
+            os.startfile(f'{filename}')
         else:
             os.popen(f'sh {filename}')
     else:
@@ -62,6 +67,7 @@ async def open_proc(message):
             res = os.system('shutdown /s /t 1')
         else:
             res = os.system('shutdown -h now')
+
         if res > 0:
             await message.answer(f"Код ответа {res}")
         else:
@@ -70,9 +76,9 @@ async def open_proc(message):
         await message.answer(f'Отказано в доступе для {message.from_user.id}')
 
 
-@dp.message_handler(commands=['ostest'])
+@dp.message_handler(commands=['echo'])
 async def echo(message: types.Message):
-    await message.answer(platform.system())
+    await message.answer(message.text)
 
 
 if __name__ == '__main__':
