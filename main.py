@@ -47,7 +47,7 @@ async def open_proc(message):
 async def open_proc(message):
     if message.from_user.id == os.environ.get("ADMIN_USER_ID"):
         if platform.system() == 'Windows':
-            os.system('shutdown /r')
+            os.system('shutdown /p /f')
         else:
             os.system('shutdown -h now')
 
