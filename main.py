@@ -1,5 +1,6 @@
 import logging
 import os
+import platform
 from aiogram import Bot, Dispatcher, executor, types
 from dotenv import load_dotenv
 
@@ -36,10 +37,19 @@ async def open_proc(message):
         await message.answer(f"Не удалось найти программу '{program}'")
 
 
+@dp.message_handler(commands=['run'])
+async def open_proc(message):
+    filename = message.get_args()
+    os.popen(f'sh {filename}')
+
+
 @dp.message_handler(commands=['shutdown'])
 async def open_proc(message):
     if message.from_user.id == os.environ.get("ADMIN_USER_ID"):
-        os.system('shutdown -h now')
+        if platform.system() == 'Windows':
+            os.system('shutdown /r')
+        else:
+            os.system('shutdown -h now')
 
 
 # @dp.message_handler()
