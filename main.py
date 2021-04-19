@@ -55,9 +55,11 @@ async def open_proc(message):
 async def open_proc(message):
     if message.from_user.id == os.environ.get("ADMIN_USER_ID"):
         if platform.system() == 'Windows':
-            os.system('shutdown /s /f')
+            res = os.system('shutdown /s /f')
         else:
-            os.system('shutdown -h now')
+            res = os.system('shutdown -h now')
+        if res > 0:
+            await message.answer(f"Код ответа {res}")
 
 
 @dp.message_handler(commands=['ostest'])
