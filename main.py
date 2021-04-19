@@ -31,23 +31,31 @@ async def send(message):
 
 @dp.message_handler(commands=['open'])
 async def open_proc(message):
-    program = message.get_args()
-    res = os.system(f"open -a '{program}'")
-    if res > 0:
-        await message.answer(f"Не удалось найти программу '{program}'")
+    if message.from_user.id == os.environ.get("ADMIN_USER_ID"):
+        program = message.get_args()
+        if platform.system() == 'Windows':
+            res = 0
+        else:
+            res = os.system(f"open -a '{program}'")
+        if res > 0:
+            await message.answer(f"Не удалось найти программу '{program}'")
 
 
 @dp.message_handler(commands=['run'])
 async def open_proc(message):
-    filename = message.get_args()
-    os.popen(f'sh {filename}')
+    if message.from_user.id == os.environ.get("ADMIN_USER_ID"):
+        filename = message.get_args()
+        if platform.system() == 'Windows':
+            pass
+        else:
+            os.popen(f'sh {filename}')
 
 
 @dp.message_handler(commands=['shutdown'])
 async def open_proc(message):
     if message.from_user.id == os.environ.get("ADMIN_USER_ID"):
         if platform.system() == 'Windows':
-            os.system('shutdown /p /f')
+            os.system('shutdown /s /f')
         else:
             os.system('shutdown -h now')
 
