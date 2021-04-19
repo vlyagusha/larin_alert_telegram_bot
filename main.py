@@ -67,7 +67,7 @@ async def open_proc(message):
         else:
             await message.answer("Успешно")
     else:
-        await message.answer('Отказано в доступе')
+        await message.answer(f'Отказано в доступе для {message.from_user.id}')
 
 
 @dp.message_handler(commands=['ostest'])
