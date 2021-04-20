@@ -33,53 +33,66 @@ async def send(message):
 
 @dp.message_handler(commands=['open'])
 async def open_proc(message):
-    if int(message.from_user.id) == int(os.environ.get("ADMIN_USER_ID")):
-        program = message.get_args()
-        if platform.system() == 'Windows':
-            os.startfile(f'{program}')
-            res = 0
-        else:
-            res = os.system(f"open -a '{program}'")
-
-        if res > 0:
-            await message.answer(f"Не удалось найти программу '{program}'")
-        else:
-            await message.answer("Успешно")
-    else:
+    if not is_allowed(message.from_user.id):
         await message.answer('Отказано в доступе')
+        return
+
+    program = message.get_args()
+    if platform.system() == 'Windows':
+        os.startfile(f'{program}')
+        res = 0
+    else:
+        res = os.system(f"open -a '{program}'")
+
+    if res > 0:
+        answer = f"Не удалось найти программу '{program}'"
+    else:
+        answer = "Успешно"
+    await message.answer(answer)
 
 
 @dp.message_handler(commands=['run'])
 async def open_proc(message):
-    if int(message.from_user.id) == int(os.environ.get("ADMIN_USER_ID")):
-        filename = message.get_args()
-        if platform.system() == 'Windows':
-            os.startfile(f'{filename}')
-        else:
-            os.popen(f'sh {filename}')
-    else:
+    if not is_allowed(message.from_user.id):
         await message.answer('Отказано в доступе')
+        return
+
+    filename = message.get_args()
+    if platform.system() == 'Windows':
+        os.startfile(f'{filename}')
+    else:
+        os.popen(f'sh {filename}')
 
 
 @dp.message_handler(commands=['shutdown'])
 async def open_proc(message):
-    if int(message.from_user.id) == int(os.environ.get("ADMIN_USER_ID")):
-        if platform.system() == 'Windows':
-            res = os.system('shutdown /s /t 1')
-        else:
-            res = os.system('shutdown -h now')
+    if not is_allowed(message.from_user.id):
+        await message.answer('Отказано в доступе')
+        return
 
-        if res > 0:
-            await message.answer(f"Код ответа {res}")
-        else:
-            await message.answer("Успешно")
+    if platform.system() == 'Windows':
+        res = os.system('shutdown /s /t 1')
     else:
-        await message.answer(f'Отказано в доступе для {message.from_user.id}')
+        res = os.system('shutdown -h now')
+
+    if res > 0:
+        answer = f"Код ответа {res}"
+    else:
+        answer = "Успешно"
+    await message.answer(answer)
 
 
 @dp.message_handler(commands=['echo'])
 async def echo(message: types.Message):
     await message.answer(message.text)
+
+
+def is_allowed(user_id, role='admin'):
+    ids = os.environ.get("ALLOWED_USER_IDS").split(",")
+    ids = list(map(lambda item: int(item), ids))
+    if user_id in ids:
+        return True
+    return False
 
 
 if __name__ == '__main__':
