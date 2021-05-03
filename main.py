@@ -17,12 +17,9 @@ dp = Dispatcher(bot)
 @dp.message_handler(commands=['start', 'help'])
 async def start(message: types.Message):
     await message.reply('''
-Привет! Я - бот-инпектор
+Привет! Я - бот-инспектор
 Вот что я умею:
 /send <сообщение> или /say <сообщение> - отправить сообщение в чат
-/open <путь к файлу> - открыть программу на удалённом компьютере
-/run <путь к файлу> - запустить исполняемый файл на удалённом компьютере
-/shutdown - выключить удалённый компьютер
 /echo <сообщение> - проверка связи
     ''', reply_markup=kb.alert_kb)
 
@@ -38,7 +35,7 @@ async def send(message):
 
 @dp.message_handler(commands=['open'])
 async def open_proc(message):
-    if not firewall.is_allowed(message.from_user.id):
+    if not firewall.is_admin(message.from_user.id):
         await message.answer('Отказано в доступе', reply_markup=kb.remove_kb)
         return
 
@@ -58,7 +55,7 @@ async def open_proc(message):
 
 @dp.message_handler(commands=['run'])
 async def open_proc(message):
-    if not firewall.is_allowed(message.from_user.id):
+    if not firewall.is_admin(message.from_user.id):
         await message.answer('Отказано в доступе', reply_markup=kb.remove_kb)
         return
 
@@ -71,7 +68,7 @@ async def open_proc(message):
 
 @dp.message_handler(commands=['shutdown'])
 async def open_proc(message):
-    if not firewall.is_allowed(message.from_user.id):
+    if not firewall.is_admin(message.from_user.id):
         await message.answer('Отказано в доступе', reply_markup=kb.remove_kb)
         return
 
