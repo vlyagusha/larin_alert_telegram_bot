@@ -54,7 +54,7 @@ async def open_proc(message):
 
 
 @dp.message_handler(commands=['run'])
-async def open_proc(message):
+async def run_proc(message):
     if not firewall.is_admin(message.from_user.id):
         await message.answer('Отказано в доступе', reply_markup=kb.remove_kb)
         return
@@ -67,7 +67,7 @@ async def open_proc(message):
 
 
 @dp.message_handler(commands=['shutdown'])
-async def open_proc(message):
+async def shutdown_proc(message):
     if not firewall.is_admin(message.from_user.id):
         await message.answer('Отказано в доступе', reply_markup=kb.remove_kb)
         return
